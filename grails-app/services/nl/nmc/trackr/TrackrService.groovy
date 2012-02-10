@@ -32,7 +32,7 @@ class TrackrService {
 				callerProperties['reference'] = reference ?: '-'
 				
 				// start with a timestamp
-				callerProperties['datetime'] = new Date().clearTime().toString()
+				callerProperties['datetime'] = new Date()
 		
 				// GET/POST
 				callerProperties['method'] = request.getMethod() ?: "-"
