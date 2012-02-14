@@ -14,11 +14,11 @@ class TrackrController {
 	def trackrDirectory = new File(config.trackr.path)
 
 	/**
-	 * Demo page to test the TrackR
+	 * Home of the trackR is the listing of the files
 	 * @return
 	 */
     def index = { 
-		//view the index.gsp on how to use it!
+		redirect(action: 'list')
 	}
 	
 	/**
