@@ -3,6 +3,15 @@ package nl.nmc.trackr
 import org.codehaus.groovy.grails.commons.*
 
 class TrackrController {
+	
+	//inject config
+	def config = ConfigurationHolder.config
+	
+	//inject service(s)
+	def TrackrService
+	
+	//set trackr directory for class
+	def trackrDirectory = new File(config.trackr.path)
 
 	/**
 	 * Demo page to test the TrackR
@@ -13,17 +22,12 @@ class TrackrController {
 	}
 	
 	/**
-	 * Page to view the log files
+	 * Page to list the log files
 	 * @return
 	 */
-	def view = {
-		
-		//inject config
-		def config = ConfigurationHolder.config
+	def list = {
 		
 		//init variables
-		def trackrFile = null
-		def trackrDirectory = new File(config.trackr.path)
 		def trackrDirectoryFiles = []
 
 		//read file(s) in the directory that match with the trackr prefix
@@ -35,16 +39,48 @@ class TrackrController {
 			flash.message = 'Unable to read the logs directory (' + trackrDirectory + ') of trackR.'
 		}
 		
+		//return variables to the template
+		[	trackrDirectory:trackrDirectory, 
+			trackrDirectoryFiles:trackrDirectoryFiles
+		]
+		
+	}
+	
+	/**
+	* Page to view a log file
+	* @return
+	*/
+	def view = {
+		
+		//init variables
+		def trackrFile = null
+		
 		//check if a file has been selected
 		if (params.trackrFile){
 			trackrFile = new File("${trackrDirectory}/${params.trackrFile}")
 		}
 		
-		//return variables to the template
-		[	trackrFile:trackrFile,
-			trackrDirectory:trackrDirectory, 
-			trackrDirectoryFiles:trackrDirectoryFiles
-		]
+		[ trackrFile:trackrFile ]
+	}
+	
+	/**
+	 * Analyze a log file
+	 * @return
+	 */
+	def analyze = {
 		
+		//init variables
+		def trackrFile = null
+		def trackrFileSummary = null
+		
+		//check if a file has been selected
+		if (params.trackrFile){
+			trackrFile = new File("${trackrDirectory}/${params.trackrFile}")
+			
+			//analyze
+			trackrFileSummary = TrackrService.analyze(trackrFile.name)
+		}
+		
+		[ trackrFile:trackrFile, trackrFileSummary:trackrFileSummary ]
 	}
 }

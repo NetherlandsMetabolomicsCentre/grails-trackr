@@ -5,11 +5,11 @@ import org.codehaus.groovy.grails.commons.*
 
 class TrackrService {
 	
-	static transactional = true
+	static transactional = false
+	
+	def config = ConfigurationHolder.config
 
 	def track(reference, request, params) {
-
-		def config = ConfigurationHolder.config
 		
 		def trackrFile = null
 
@@ -63,5 +63,46 @@ class TrackrService {
 				log.error("TrackR is was not able to log any data. ${e}")
 			}
 		}
+	}
+	
+	def analyze(trackrFile = null) {
+		
+		//init
+		def report 			= [:]
+		def browsersUsed 	= [:]
+		def urlsCalled 		= [:]
+		
+		//see if we can analyze a file
+		if (trackrFile != null){
+			
+			//parse
+			new File("${config.trackr.path}${trackrFile}").eachLine{ trackrEntry ->
+				
+				//split parts of the trackrEntry
+				def trackrEntryParts = trackrEntry.split("\t")
+				
+				def timestamp 	= trackrEntryParts[0] //timestamp
+				def reference 	= trackrEntryParts[1] //reference
+				def date 		= trackrEntryParts[2] //date
+				def method 		= trackrEntryParts[3] //method
+				def url 		= trackrEntryParts[4] //url
+				def user 		= trackrEntryParts[5] //user
+				def ip 			= trackrEntryParts[6] //ip
+				def browser 	= trackrEntryParts[7] //browser
+				def cookies 	= trackrEntryParts[8] //cookies
+				
+				//browsers used
+				if (browsersUsed["${browser}"]) { browsersUsed["${browser}"]++ } else { browsersUsed["${browser}"] = 1 }
+				
+				//urls called
+				if (urlsCalled["${url}"]) { urlsCalled["${url}"]++ } else { urlsCalled["${url}"] = 1 }
+			}
+			
+			//merge information
+			report['browsersUsed'] 	= browsersUsed
+			report['urlsCalled'] 	= urlsCalled
+		}
+		
+		return report
 	}
 }
