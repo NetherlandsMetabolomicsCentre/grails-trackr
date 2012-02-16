@@ -83,4 +83,12 @@ class TrackrController {
 		
 		[ trackrFile:trackrFile, trackrFileSummary:trackrFileSummary ]
 	}
+	
+	/**
+	 * Test a page log entry
+	 * @return
+	 */
+	def test = {
+		//logging is in the test.gsp
+	}
 }

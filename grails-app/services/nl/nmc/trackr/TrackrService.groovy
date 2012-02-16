@@ -29,6 +29,8 @@ class TrackrService {
 				callerProperties['timestamp'] = System.currentTimeMillis()
 		
 				// allow users to add a reference
+				reference = reference.toString().tokenize().join(' ') // force to String and remove any \t\n\r\f
+				
 				callerProperties['reference'] = reference ?: '-'
 				
 				// start with a timestamp
@@ -71,6 +73,7 @@ class TrackrService {
 		def report 			= [:]
 		def browsersUsed 	= [:]
 		def urlsCalled 		= [:]
+		def referenceCount	= [:]
 		
 		//see if we can analyze a file
 		if (trackrFile != null){
@@ -96,11 +99,15 @@ class TrackrService {
 				
 				//urls called
 				if (urlsCalled["${url}"]) { urlsCalled["${url}"]++ } else { urlsCalled["${url}"] = 1 }
+				
+				//reference cound
+				if (referenceCount["${reference}"]) { referenceCount["${reference}"]++ } else { referenceCount["${reference}"] = 1 }
 			}
 			
 			//merge information
 			report['browsersUsed'] 	= browsersUsed
 			report['urlsCalled'] 	= urlsCalled
+			report['referenceCount'] = referenceCount
 		}
 		
 		return report

@@ -17,3 +17,9 @@
 	${urlScore.value} ${urlScore.key}<br />
 </g:each>
 
+<!-- References used -->
+<h1>References</h1>
+<g:each in="${trackrFileSummary['referenceCount'].sort { a,b -> b.value<=>a.value}}" var="referenceScore">
+	${referenceScore.value} ${referenceScore.key}<br />
+</g:each>
+
