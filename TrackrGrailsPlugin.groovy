@@ -1,6 +1,6 @@
 class TrackrGrailsPlugin {
     // the plugin version
-    def version = "0.6.4"
+    def version = "0.7.0"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
@@ -8,19 +8,25 @@ class TrackrGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp",
+			"grails-app/conf/DataSource.groovy",
 			"grails-app/views/index.gsp"
     ]
 
-    // TODO Fill in these fields
+// TODO Fill in these fields
     def author = "Michael van Vliet"
     def authorEmail = "m.s.vanvliet@lacdr.leidenuniv.nl"
-    def title = "Trackr Plugin"
-    def description = '''\\
-Track user activity within the application
-'''
+    def title = "Usage tracker for Grails projects"
+    def description = '''Usage tracker for Grails projects'''
 
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/plugin/trackr"
+    def documentation = "https://github.com/NetherlandsMetabolomicsCentre/grails-trackr"
+def license = "GPL3"
+def issueManagement = [system: "github", url: "https://github.com/NetherlandsMetabolomicsCentre/grails-trackr/issues"]
+def scm = [url: "https://github.com/NetherlandsMetabolomicsCentre/grails-trackr"]
+def organization = [ name: "Netherlands Metabolomics Centre", url: "http://www.metabolomicscentre.nl/" ]
+def developers = [
+[ name: "Michael van Vliet", email: "m.s.vanvliet@lacdr.leidenuniv.nl" ]
+]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before 
