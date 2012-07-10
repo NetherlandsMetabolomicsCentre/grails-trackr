@@ -15,6 +15,7 @@ class TrackrService {
 
 		// init file to log to
 		try {
+			new File("${config.trackr.path}").mkdirs() // make sure the path exists
 			trackrFile = new File("${config.trackr.path}${config.trackr.prefix}trackr.${new SimpleDateFormat('yyyyMMdd').format(new Date())}.log".toLowerCase())
 		} catch (e) {
 			//unable to access the file to log to
