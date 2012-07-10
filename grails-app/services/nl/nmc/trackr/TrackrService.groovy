@@ -15,6 +15,7 @@ class TrackrService {
 
 		// init file to log to
 		try {
+			new File("${config.trackr.path}").mkdirs() // make sure the path exists
 			trackrFile = new File("${config.trackr.path}${config.trackr.prefix}trackr.${new SimpleDateFormat('yyyyMMdd').format(new Date())}.log".toLowerCase())
 		} catch (e) {
 			//unable to access the file to log to
@@ -51,14 +52,11 @@ class TrackrService {
 				callerProperties['user'] = request.getUserPrincipal() ?: "-"
 		
 				// try to resolve the users IP
-				callerProperties['ip'] = request.getHeader("Client-IP")?: "-"
+				callerProperties['ip'] = request.getRemoteAddr() ?: "-"
 		
 				// do a browser detection
 				callerProperties['browser'] = request.getHeader('user-agent') ?: "-"
-		
-				// aggregate all cookies available
-				callerProperties['cookies'] = request.getCookies().collect { "${it.name}::${it.value}" }.join(", ") ?: "-"
-		
+				
 				trackrFile << "${callerProperties.collect { it.value }.join('\t')}\n"
 			} catch (e) {
 				//loggin failed
@@ -92,7 +90,6 @@ class TrackrService {
 				def user 		= trackrEntryParts[5] //user
 				def ip 			= trackrEntryParts[6] //ip
 				def browser 	= trackrEntryParts[7] //browser
-				def cookies 	= trackrEntryParts[8] //cookies
 				
 				//browsers used
 				if (browsersUsed["${browser}"]) { browsersUsed["${browser}"]++ } else { browsersUsed["${browser}"] = 1 }
