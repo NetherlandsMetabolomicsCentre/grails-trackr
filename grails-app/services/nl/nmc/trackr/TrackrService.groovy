@@ -52,7 +52,7 @@ class TrackrService {
 				callerProperties['user'] = request.getUserPrincipal() ?: "-"
 		
 				// try to resolve the users IP
-				callerProperties['ip'] = InetAddress.localHost.hostAddress ?: "-"
+				callerProperties['ip'] = request.getRemoteAddr() ?: "-"
 		
 				// do a browser detection
 				callerProperties['browser'] = request.getHeader('user-agent') ?: "-"
