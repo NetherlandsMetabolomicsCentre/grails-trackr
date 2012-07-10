@@ -51,14 +51,11 @@ class TrackrService {
 				callerProperties['user'] = request.getUserPrincipal() ?: "-"
 		
 				// try to resolve the users IP
-				callerProperties['ip'] = request.getHeader("Client-IP")?: "-"
+				callerProperties['ip'] = InetAddress.localHost.hostAddress ?: "-"
 		
 				// do a browser detection
 				callerProperties['browser'] = request.getHeader('user-agent') ?: "-"
-		
-				// aggregate all cookies available
-				callerProperties['cookies'] = request.getCookies().collect { "${it.name}::${it.value}" }.join(", ") ?: "-"
-		
+				
 				trackrFile << "${callerProperties.collect { it.value }.join('\t')}\n"
 			} catch (e) {
 				//loggin failed
@@ -92,7 +89,6 @@ class TrackrService {
 				def user 		= trackrEntryParts[5] //user
 				def ip 			= trackrEntryParts[6] //ip
 				def browser 	= trackrEntryParts[7] //browser
-				def cookies 	= trackrEntryParts[8] //cookies
 				
 				//browsers used
 				if (browsersUsed["${browser}"]) { browsersUsed["${browser}"]++ } else { browsersUsed["${browser}"] = 1 }
