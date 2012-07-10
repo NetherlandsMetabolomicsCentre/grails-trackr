@@ -1,5 +1,5 @@
 // configuration for plugin testing - will not be included in the plugin zip
-trackr.path = "/tmp/"
+trackr.path = "/tmp/trackr/"
 trackr.prefix = "logger."
  
 log4j = {
